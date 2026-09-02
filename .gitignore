@@ -1,2 +1,11 @@
 # Dependencies
 node_modules/
+
+#AI folders
+.agents/
+.claude/
+.windsurf/
+
+# Environment Variables
+.env
+/src/generated/prisma

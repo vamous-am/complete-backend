@@ -4,10 +4,66 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
-}
+  provider = "prisma-client-js"
+  }
 
 datasource db {
   provider = "postgresql"
+}
+
+
+// Define your database models here
+model User {
+  id    String    @id @default(uuid())
+  email String @unique
+  name  String
+  password String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation back to WatchlistItem
+  watchlistItems WatchlistItem[]
+  movies Movie[] @relation("MovieCreator")
+}
+
+model Movie {
+  id          String   @id @default(uuid())
+  title       String
+  overview    String?   // Optional field for movie overview, that can be null
+  description String
+  genre      String[] @default([])
+  runtime     Int?
+  posterUrl  String?
+  releaseDate DateTime
+  createdAt   DateTime @default(now())
+  createdBy   String
+  updatedAt   DateTime @updatedAt
+
+  // Relation back to WatchlistItem
+  watchlistItems WatchlistItem[]
+  // Relation back to User
+  creator User @relation("MovieCreator", fields: [createdBy], references: [id], onDelete: Cascade)
+}
+
+model WatchlistItem {
+  id        String   @id @default(uuid())
+  userId    String
+  movieId   String
+  status    watchlistStatus @default(PLANNED) 
+  rating Int? 
+  notes String? 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Define relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+}
+
+enum watchlistStatus {
+  PLANNED
+  WATCHING
+  COMPLETED
+  DROPPED
 }

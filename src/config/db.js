@@ -1,6 +1,10 @@
-import {prismaClient} from "@prisma/client";
+import {PrismaClient} from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-const prisma = new prismaClient({
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+
+const prisma = new PrismaClient({
+    adapter,
     log: process.env.NODE_ENV === "development"
     ? ["query", "error", "warn"] 
     : ["error"]
@@ -11,11 +15,11 @@ const connectDB = async () =>{
         await prisma.$connect()
         console.log("db connected via prisma")
     } catch (error) {
-        console.error("databse connection error : ${error.message}");
+        console.error(`database connection error: ${error.message}`);
         process.exit(1);
     }
 
-}
+};
 const disconnectDB = async () =>{
     await prisma.$disconnect()
 

@@ -4,6 +4,7 @@ import { connectDB, disconnectDB } from "./config/db.js";
 
 // Import the movie routes
 import movieRoutes from "./routes/movieRoute.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config(); //loads variables from .env into process.env
 connectDB();
@@ -11,8 +12,13 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+
+app.use(express.json()); //middleware to parse JSON request bodies
+app.use(express.urlencoded({ extended: true })); //middleware to parse URL-encoded request bodies
+
 //api routes
 app.use("/movies", movieRoutes);
+app.use("/auth", authRoutes);
 
 // Define a simple route for the root path
 app.get('/', (req, res) => {

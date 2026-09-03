@@ -56,7 +56,7 @@ model WatchlistItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Define relations
+  // Define relations like join tables 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
 }

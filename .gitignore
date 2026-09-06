@@ -5,7 +5,7 @@ node_modules/
 .agents/
 .claude/
 .windsurf/
-
+.freebuff
 # Environment Variables
 .env
 /src/generated/prisma
